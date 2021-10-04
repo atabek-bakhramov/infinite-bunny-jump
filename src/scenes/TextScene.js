@@ -48,8 +48,6 @@ export default class TextScene extends Phaser.Scene {
 
   preload() {}
   create() {
-    console.log("running");
-
     this.buttonEn = this.add
       .text(20, 20, `${i18next.t("english")}`, {
         color: "#000",

@@ -4,8 +4,6 @@ import Game from "./scenes/Game.js";
 import GameOver from "./scenes/GameOver.js";
 import TextScene from "./scenes/TextScene.js";
 
-console.log("hei");
-
 new Phaser.Game({
   type: Phaser.AUTO,
   width: 480,

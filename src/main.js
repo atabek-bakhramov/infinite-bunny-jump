@@ -5,7 +5,7 @@ import GameOver from "./scenes/GameOver.js";
 import TextScene from "./scenes/TextScene.js";
 
 new Phaser.Game({
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   width: 480,
   height: 640,
   scene: [Game, TextScene, GameOver],

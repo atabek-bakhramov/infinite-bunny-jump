@@ -10,27 +10,18 @@ i18next.init({
       translation: {
         carrots: "Carrots:",
         gameOver: "Game Over!",
-        english: "English",
-        russian: "Russian",
-        arabic: "Arabic",
       },
     },
     ru: {
       translation: {
         carrots: "Морковь:",
         gameOver: "Конец игры!",
-        english: "Английский",
-        russian: "Русский",
-        arabic: "Арабский",
       },
     },
     ar: {
       translation: {
         carrots: ":جزر",
         gameOver: "!انتهت اللعبة",
-        english: "الانجليزية",
-        russian: "الروسية",
-        arabic: "العربية",
       },
     },
   },
@@ -49,7 +40,7 @@ export default class TextScene extends Phaser.Scene {
   preload() {}
   create() {
     this.buttonEn = this.add
-      .text(20, 20, `${i18next.t("english")}`, {
+      .text(20, 20, "English", {
         color: "#000",
       })
       .setInteractive()
@@ -62,7 +53,7 @@ export default class TextScene extends Phaser.Scene {
     this.buttonEn.setScrollFactor(0);
 
     this.buttonRu = this.add
-      .text(120, 20, `${i18next.t("russian")}`, {
+      .text(120, 20, "Русский", {
         color: "#000",
       })
       .setInteractive()
@@ -75,7 +66,7 @@ export default class TextScene extends Phaser.Scene {
     this.buttonRu.setScrollFactor(0);
 
     this.buttonAr = this.add
-      .text(220, 20, `${i18next.t("arabic")}`, {
+      .text(220, 20, "العربية", {
         color: "#000",
       })
       .setInteractive()

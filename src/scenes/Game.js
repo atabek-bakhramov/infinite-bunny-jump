@@ -20,9 +20,6 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.GameObjects.Text} */
   carrotsCollectedText;
 
-  /** @type {Phaser.GameObjects.Text} */
-  chooseLanguage;
-
   constructor() {
     super("game");
   }
@@ -44,6 +41,8 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
+    this.scene.launch("text-scene");
+
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
 
     this.platforms = this.physics.add.staticGroup();
@@ -89,26 +88,12 @@ export default class Game extends Phaser.Scene {
     );
 
     this.carrotsCollectedText = this.add
-      .text(380, 10, `${i18next.t("carrots")} 0`, {
+      .text(380, 50, `0`, {
         color: "#000",
         fontSize: 24,
       })
       .setScrollFactor(0)
       .setOrigin(0.5, 0);
-
-    this.chooseLanguage = this.add
-      .text(80, 600, `${i18next.t("chooseLanguage")}`, {
-        color: "#000",
-        fontSize: 12,
-      })
-      .setScrollFactor(0)
-      .setOrigin(0.5, 0)
-      .setInteractive()
-      .on("pointerdown", () => this.chooseLanguage.setScale(1.1))
-      .on("pointerup", () => {
-        this.chooseLanguage.setScale(1);
-        this.goBack();
-      });
   }
 
   update(t, dt) {
@@ -206,9 +191,7 @@ export default class Game extends Phaser.Scene {
 
     this.carrotsCollected++;
 
-    this.carrotsCollectedText.text = `${i18next.t("carrots")} ${
-      this.carrotsCollected
-    }`;
+    this.carrotsCollectedText.text = `${this.carrotsCollected}`;
   }
 
   findBottomMostPlatform() {
@@ -227,9 +210,5 @@ export default class Game extends Phaser.Scene {
     }
 
     return bottomPlatform;
-  }
-
-  goBack() {
-    this.scene.start("navbar");
   }
 }

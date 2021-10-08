@@ -20,7 +20,8 @@ export default class Game extends Phaser.Scene {
   leftButton;
   rightButton;
 
-  testButton;
+  leftInterval;
+  rightInterval;
 
   /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
@@ -45,7 +46,7 @@ export default class Game extends Phaser.Scene {
     this.load.image("bunny-jump", "assets/bunny1_jump.png");
     this.load.image("carrot", "assets/carrot.png");
 
-    this.load.audio("jump", "assets/sfx/phaseJump1.wav");
+    // this.load.audio("jump", "assets/sfx/phaseJump1.wav");
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -55,6 +56,8 @@ export default class Game extends Phaser.Scene {
   create() {
     this.scene.launch("text-scene");
 
+    this.leftFlag = false;
+
     this.canvas = this.sys.game.canvas;
 
     this.leftButton = this.add
@@ -62,10 +65,7 @@ export default class Game extends Phaser.Scene {
         color: "#000",
         fontSize: 24,
       })
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.leftButton.setScale(1.5);
-      });
+      .setInteractive();
     this.leftButton.depth = 100;
     this.leftButton.setScrollFactor(0);
 
@@ -74,10 +74,7 @@ export default class Game extends Phaser.Scene {
         color: "#000",
         fontSize: 24,
       })
-      .setInteractive()
-      .on("pointerdown", () => {
-        this.rightButton.setScale(1.5);
-      });
+      .setInteractive();
     this.rightButton.depth = 100;
     this.rightButton.setScrollFactor(0);
 
@@ -134,6 +131,20 @@ export default class Game extends Phaser.Scene {
       })
       .setScrollFactor(0)
       .setOrigin(0.5, 0);
+
+    this.leftButton.on("pointerdown", () => {
+      this.leftButton.setScale(1.5);
+      this.leftInterval = setInterval(() => {
+        this.player.setVelocityX(-200);
+      }, 20);
+    });
+
+    this.rightButton.on("pointerdown", () => {
+      this.rightButton.setScale(1.5);
+      this.rightInterval = setInterval(() => {
+        this.player.setVelocityX(200);
+      }, 20);
+    });
   }
 
   update(t, dt) {
@@ -142,12 +153,12 @@ export default class Game extends Phaser.Scene {
     }
 
     this.leftButton.on("pointerup", () => {
-      this.player.setVelocityX(-200);
+      clearInterval(this.leftInterval);
       this.leftButton.setScale(1);
     });
 
     this.rightButton.on("pointerup", () => {
-      this.player.setVelocityX(200);
+      clearInterval(this.rightInterval);
       this.rightButton.setScale(1);
     });
 
@@ -169,7 +180,7 @@ export default class Game extends Phaser.Scene {
       this.player.setVelocityY(-300);
       this.player.setTexture("bunny-jump");
 
-      this.sound.play("jump");
+      // this.sound.play("jump");
     }
 
     const vy = this.player.body.velocity.y;
@@ -260,14 +271,5 @@ export default class Game extends Phaser.Scene {
     }
 
     return bottomPlatform;
-  }
-
-  pointleftSide() {
-    const gameWidth = this.scale.width;
-    if (this.pointer.x < gameWidth * 0.5) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }

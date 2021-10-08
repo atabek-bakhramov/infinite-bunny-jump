@@ -12,6 +12,9 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Types.Input.Keyboard.CursorKeys} */
   cursors;
 
+  /** @type {Phaser.Types.Input.activePointer} */
+  pointer;
+
   /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
 
@@ -38,6 +41,8 @@ export default class Game extends Phaser.Scene {
     this.load.audio("jump", "assets/sfx/phaseJump1.wav");
 
     this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.pointer = this.input.activePointer;
   }
 
   create() {
@@ -66,6 +71,8 @@ export default class Game extends Phaser.Scene {
       .setScale(0.5);
 
     this.physics.add.collider(this.platforms, this.player);
+
+    this.player.depth = 100;
 
     this.player.body.checkCollision.up = false;
     this.player.body.checkCollision.left = false;
@@ -127,9 +134,16 @@ export default class Game extends Phaser.Scene {
       this.player.setTexture("bunny-stand");
     }
 
-    if (this.cursors.left.isDown && !touchingDown) {
+    if (
+      (this.cursors.left.isDown && !touchingDown) ||
+      (this.pointer.isDown && this.leftSidePointer() === true && !touchingDown)
+    ) {
+      console.log("right");
       this.player.setVelocityX(-200);
-    } else if (this.cursors.right.isDown && !touchingDown) {
+    } else if (
+      (this.cursors.right.isDown && !touchingDown) ||
+      (this.pointer.isDown && this.leftSidePointer() === false && !touchingDown)
+    ) {
       this.player.setVelocityX(200);
     } else {
       this.player.setVelocityX(0);
@@ -210,5 +224,14 @@ export default class Game extends Phaser.Scene {
     }
 
     return bottomPlatform;
+  }
+
+  leftSidePointer() {
+    const gameWidth = this.scale.width;
+    if (this.pointer.x > gameWidth * 0.5) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

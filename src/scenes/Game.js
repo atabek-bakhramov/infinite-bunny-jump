@@ -15,6 +15,9 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Types.Input.activePointer} */
   pointer;
 
+  /** @type {Phaser.Types.Input.activePointer} */
+  touch;
+
   /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
 
@@ -108,6 +111,17 @@ export default class Game extends Phaser.Scene {
       return;
     }
 
+    this.touch = this.input.on("pointerdown", () => {
+      const gameWidth = this.scale.width;
+      if (this.touch.x < gameWidth * 0.5) {
+        console.log("clicking left");
+        this.player.setVelocityX(-200);
+      } else {
+        console.log("clicking right");
+        this.player.setVelocityX(200);
+      }
+    });
+
     this.platforms.children.iterate((child) => {
       /** @type {Phaser.Physics.Arcade.Sprite} */
       const platform = child;
@@ -134,16 +148,10 @@ export default class Game extends Phaser.Scene {
       this.player.setTexture("bunny-stand");
     }
 
-    if (
-      (this.cursors.left.isDown && !touchingDown) ||
-      (this.pointer.isDown && this.leftSidePointer() === true && !touchingDown)
-    ) {
-      console.log("right");
+    if (this.cursors.left.isDown && !touchingDown) {
       this.player.setVelocityX(-200);
-    } else if (
-      (this.cursors.right.isDown && !touchingDown) ||
-      (this.pointer.isDown && this.leftSidePointer() === false && !touchingDown)
-    ) {
+    } else if (this.cursors.right.isDown && !touchingDown) {
+      // (this.pointer.isDown && this.pointleftSide() === false && !touchingDown)
       this.player.setVelocityX(200);
     } else {
       this.player.setVelocityX(0);
@@ -226,9 +234,9 @@ export default class Game extends Phaser.Scene {
     return bottomPlatform;
   }
 
-  leftSidePointer() {
+  pointleftSide() {
     const gameWidth = this.scale.width;
-    if (this.pointer.x > gameWidth * 0.5) {
+    if (this.pointer.x < gameWidth * 0.5) {
       return true;
     } else {
       return false;

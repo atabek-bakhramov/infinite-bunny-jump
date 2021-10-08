@@ -3,6 +3,8 @@ import Phaser from "../lib/phaser.js";
 import Carrot from "../game/Carrot.js";
 
 export default class Game extends Phaser.Scene {
+  canvas;
+
   /** @type {Phaser.Physics.Arcade.StaticGroup} */
   platforms;
 
@@ -15,8 +17,10 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Types.Input.activePointer} */
   pointer;
 
-  /** @type {Phaser.Types.Input.activePointer} */
-  touch;
+  leftButton;
+  rightButton;
+
+  testButton;
 
   /** @type {Phaser.Physics.Arcade.Group} */
   carrots;
@@ -50,6 +54,32 @@ export default class Game extends Phaser.Scene {
 
   create() {
     this.scene.launch("text-scene");
+
+    this.canvas = this.sys.game.canvas;
+
+    this.leftButton = this.add
+      .text(30, this.canvas.height * 0.5, "<", {
+        color: "#000",
+        fontSize: 24,
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.leftButton.setScale(1.5);
+      });
+    this.leftButton.depth = 100;
+    this.leftButton.setScrollFactor(0);
+
+    this.rightButton = this.add
+      .text(440, this.canvas.height * 0.5, ">", {
+        color: "#000",
+        fontSize: 24,
+      })
+      .setInteractive()
+      .on("pointerdown", () => {
+        this.rightButton.setScale(1.5);
+      });
+    this.rightButton.depth = 100;
+    this.rightButton.setScrollFactor(0);
 
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
 
@@ -111,15 +141,14 @@ export default class Game extends Phaser.Scene {
       return;
     }
 
-    this.touch = this.input.on("pointerdown", () => {
-      const gameWidth = this.scale.width;
-      if (this.touch.x < gameWidth * 0.5) {
-        console.log("clicking left");
-        this.player.setVelocityX(-200);
-      } else {
-        console.log("clicking right");
-        this.player.setVelocityX(200);
-      }
+    this.leftButton.on("pointerup", () => {
+      this.player.setVelocityX(-200);
+      this.leftButton.setScale(1);
+    });
+
+    this.rightButton.on("pointerup", () => {
+      this.player.setVelocityX(200);
+      this.rightButton.setScale(1);
     });
 
     this.platforms.children.iterate((child) => {
@@ -151,7 +180,6 @@ export default class Game extends Phaser.Scene {
     if (this.cursors.left.isDown && !touchingDown) {
       this.player.setVelocityX(-200);
     } else if (this.cursors.right.isDown && !touchingDown) {
-      // (this.pointer.isDown && this.pointleftSide() === false && !touchingDown)
       this.player.setVelocityX(200);
     } else {
       this.player.setVelocityX(0);

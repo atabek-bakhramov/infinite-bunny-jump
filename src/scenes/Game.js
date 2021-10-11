@@ -14,9 +14,6 @@ export default class Game extends Phaser.Scene {
   /** @type {Phaser.Types.Input.Keyboard.CursorKeys} */
   cursors;
 
-  /** @type {Phaser.Types.Input.activePointer} */
-  pointer;
-
   leftButton;
   rightButton;
 
@@ -45,46 +42,60 @@ export default class Game extends Phaser.Scene {
     this.load.image("bunny-stand", "assets/bunny1_stand.png");
     this.load.image("bunny-jump", "assets/bunny1_jump.png");
     this.load.image("carrot", "assets/carrot.png");
+    this.load.image("left-arrow", "assets/left-arrow.png");
+    this.load.image("right-arrow", "assets/right-arrow.png");
 
     // this.load.audio("jump", "assets/sfx/phaseJump1.wav");
 
     this.cursors = this.input.keyboard.createCursorKeys();
-
-    this.pointer = this.input.activePointer;
   }
 
   create() {
     this.scene.launch("text-scene");
 
-    this.leftFlag = false;
-
     this.canvas = this.sys.game.canvas;
 
-    this.leftButton = this.add
-      .text(30, this.canvas.height * 0.5, "<", {
-        color: "#000",
-        fontSize: 24,
-      })
-      .setInteractive();
-    this.leftButton.depth = 100;
-    this.leftButton.setScrollFactor(0);
+    this.circle = new Phaser.Geom.Circle(30, this.canvas.height * 0.5, 300);
 
-    this.rightButton = this.add
-      .text(440, this.canvas.height * 0.5, ">", {
-        color: "#000",
-        fontSize: 24,
-      })
-      .setInteractive();
-    this.rightButton.depth = 100;
-    this.rightButton.setScrollFactor(0);
+    // this.leftButton = this.add
+    //   .text(30, this.canvas.height * 0.5, "<", {
+    //     color: "#000",
+    //     fontSize: 24,
+    //   })
+    //   .setInteractive();
+    // this.leftButton.depth = 2;
+    // this.leftButton.setScrollFactor(0);
+
+    // this.rightButton = this.add
+    //   .text(440, this.canvas.height * 0.5, ">", {
+    //     color: "#000",
+    //     fontSize: 24,
+    //   })
+    //   .setInteractive();
+    // this.rightButton.depth = 2;
+    // this.rightButton.setScrollFactor(0);
 
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
+
+    this.leftButton = this.add
+      .image(55, this.canvas.height * 0.5, "left-arrow")
+      .setScrollFactor(1, 0)
+      .setScale(0.8)
+      .setInteractive();
+    this.leftButton.depth = 2;
+
+    this.rightButton = this.add
+      .image(this.canvas.width - 55, this.canvas.height * 0.5, "right-arrow")
+      .setScrollFactor(1, 0)
+      .setScale(0.8)
+      .setInteractive();
+    this.rightButton.depth = 2;
 
     this.platforms = this.physics.add.staticGroup();
 
     // then create 5 platforms from the group
     for (let i = 0; i < 5; ++i) {
-      const x = Phaser.Math.Between(80, 400);
+      const x = Phaser.Math.Between(80, this.canvas.width - 80);
       const y = 150 * i;
 
       /** @type {Phaser.Physics.Arcade.Sprite} */
@@ -102,7 +113,7 @@ export default class Game extends Phaser.Scene {
 
     this.physics.add.collider(this.platforms, this.player);
 
-    this.player.depth = 100;
+    this.player.depth = 1;
 
     this.player.body.checkCollision.up = false;
     this.player.body.checkCollision.left = false;
@@ -133,14 +144,14 @@ export default class Game extends Phaser.Scene {
       .setOrigin(0.5, 0);
 
     this.leftButton.on("pointerdown", () => {
-      this.leftButton.setScale(1.5);
+      this.leftButton.setScale(1);
       this.leftInterval = setInterval(() => {
         this.player.setVelocityX(-200);
       }, 20);
     });
 
     this.rightButton.on("pointerdown", () => {
-      this.rightButton.setScale(1.5);
+      this.rightButton.setScale(1);
       this.rightInterval = setInterval(() => {
         this.player.setVelocityX(200);
       }, 20);
@@ -154,12 +165,12 @@ export default class Game extends Phaser.Scene {
 
     this.leftButton.on("pointerup", () => {
       clearInterval(this.leftInterval);
-      this.leftButton.setScale(1);
+      this.leftButton.setScale(0.8);
     });
 
     this.rightButton.on("pointerup", () => {
       clearInterval(this.rightInterval);
-      this.rightButton.setScale(1);
+      this.rightButton.setScale(0.8);
     });
 
     this.platforms.children.iterate((child) => {

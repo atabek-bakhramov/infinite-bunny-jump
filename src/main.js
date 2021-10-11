@@ -8,7 +8,12 @@ new Phaser.Game({
   type: Phaser.AUTO,
   width: 480,
   height: 640,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   scene: [Game, TextScene, GameOver],
+
   physics: {
     default: "arcade",
     arcade: {

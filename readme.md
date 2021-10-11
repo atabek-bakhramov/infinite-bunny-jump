@@ -1,4 +1,4 @@
-# Infinite Jumping
+## Infinite Jumping
 
 - created on a game framework using **Phaser.js**;
 - the **i18next** internationalization-framework is used for translation;

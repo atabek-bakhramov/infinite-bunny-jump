@@ -78,14 +78,14 @@ export default class Game extends Phaser.Scene {
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
 
     this.leftButton = this.add
-      .image(55, this.canvas.height * 0.5, "left-arrow")
+      .image(55, this.canvas.height - 55, "left-arrow")
       .setScrollFactor(1, 0)
       .setScale(0.8)
       .setInteractive();
     this.leftButton.depth = 2;
 
     this.rightButton = this.add
-      .image(this.canvas.width - 55, this.canvas.height * 0.5, "right-arrow")
+      .image(this.canvas.width - 55, this.canvas.height - 55, "right-arrow")
       .setScrollFactor(1, 0)
       .setScale(0.8)
       .setInteractive();
@@ -137,7 +137,7 @@ export default class Game extends Phaser.Scene {
 
     this.carrotsCollectedText = this.add
       .text(380, 50, `0`, {
-        color: "#000",
+        color: "rgb(50,100,150)",
         fontSize: 24,
       })
       .setScrollFactor(0)

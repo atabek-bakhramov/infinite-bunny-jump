@@ -41,7 +41,7 @@ export default class TextScene extends Phaser.Scene {
   create() {
     this.buttonEn = this.add
       .text(20, 20, "English", {
-        color: "#000",
+        color: "rgb(50,100,150)",
       })
       .setInteractive()
       .on("pointerdown", () => this.buttonEn.setScale(1.1))
@@ -54,7 +54,7 @@ export default class TextScene extends Phaser.Scene {
 
     this.buttonRu = this.add
       .text(120, 20, "Русский", {
-        color: "#000",
+        color: "rgb(50,100,150)",
       })
       .setInteractive()
       .on("pointerdown", () => this.buttonRu.setScale(1.1))
@@ -67,7 +67,7 @@ export default class TextScene extends Phaser.Scene {
 
     this.buttonAr = this.add
       .text(220, 20, "العربية", {
-        color: "#000",
+        color: "rgb(50,100,150)",
       })
       .setInteractive()
       .on("pointerdown", () => this.buttonAr.setScale(1.1))
@@ -80,7 +80,7 @@ export default class TextScene extends Phaser.Scene {
 
     this.carrotText = this.add
       .text(380, 10, `${i18next.t("carrots")}`, {
-        color: "#000",
+        color: "rgb(50,100,150)",
         fontSize: 24,
       })
       .setScrollFactor(0)

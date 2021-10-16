@@ -1,8 +1,16 @@
 import Phaser from "../lib/phaser.js";
 
 export default class GameOver extends Phaser.Scene {
+  reload;
+
+  canvas;
+
   constructor() {
     super("game-over");
+  }
+
+  preload() {
+    this.load.image("reload", "assets/back.png");
   }
 
   create() {
@@ -15,9 +23,14 @@ export default class GameOver extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
-    this.input.keyboard.once("keydown-SPACE", () => {
-      this.scene.start("game");
-      this.scene.start("text-scene");
-    });
+    this.canvas = this.sys.game.canvas;
+
+    this.reload = this.add
+      .image(this.canvas.width / 2, this.canvas.height * 0.6, "reload")
+      .setInteractive()
+      .on("pointerup", () => {
+        this.scene.start("game");
+        this.scene.start("text-scene");
+      });
   }
 }

@@ -5,6 +5,9 @@ import Carrot from "../game/Carrot.js";
 export default class Game extends Phaser.Scene {
   canvas;
 
+  volume;
+  isSound;
+
   /** @type {Phaser.Physics.Arcade.StaticGroup} */
   platforms;
 
@@ -45,7 +48,8 @@ export default class Game extends Phaser.Scene {
     this.load.image("left-arrow", "assets/left-arrow.png");
     this.load.image("right-arrow", "assets/right-arrow.png");
 
-    // this.load.audio("jump", "assets/sfx/phaseJump1.wav");
+    this.load.audio("jump", "assets/sfx/phaseJump1.wav");
+    this.load.image("volume", "assets/volume.png");
 
     this.cursors = this.input.keyboard.createCursorKeys();
   }
@@ -55,27 +59,9 @@ export default class Game extends Phaser.Scene {
 
     this.canvas = this.sys.game.canvas;
 
-    this.circle = new Phaser.Geom.Circle(30, this.canvas.height * 0.5, 300);
-
-    // this.leftButton = this.add
-    //   .text(30, this.canvas.height * 0.5, "<", {
-    //     color: "#000",
-    //     fontSize: 24,
-    //   })
-    //   .setInteractive();
-    // this.leftButton.depth = 2;
-    // this.leftButton.setScrollFactor(0);
-
-    // this.rightButton = this.add
-    //   .text(440, this.canvas.height * 0.5, ">", {
-    //     color: "#000",
-    //     fontSize: 24,
-    //   })
-    //   .setInteractive();
-    // this.rightButton.depth = 2;
-    // this.rightButton.setScrollFactor(0);
-
     this.add.image(240, 320, "background").setScrollFactor(1, 0);
+
+    this.isSound = true;
 
     this.leftButton = this.add
       .image(55, this.canvas.height - 55, "left-arrow")
@@ -90,6 +76,12 @@ export default class Game extends Phaser.Scene {
       .setScale(0.8)
       .setInteractive();
     this.rightButton.depth = 2;
+
+    this.volume = this.add
+      .image(this.canvas.width * 0.95, this.canvas.height * 0.05, "volume")
+      .setScrollFactor(1, 0)
+      .setInteractive();
+    this.volume.depth = 2;
 
     this.platforms = this.physics.add.staticGroup();
 
@@ -156,6 +148,11 @@ export default class Game extends Phaser.Scene {
         this.player.setVelocityX(200);
       }, 20);
     });
+
+    this.volume.on("pointerup", () => {
+      console.log("clicked");
+      this.isSound = !this.isSound;
+    });
   }
 
   update(t, dt) {
@@ -191,7 +188,9 @@ export default class Game extends Phaser.Scene {
       this.player.setVelocityY(-300);
       this.player.setTexture("bunny-jump");
 
-      // this.sound.play("jump");
+      if (this.isSound) {
+        this.sound.play("jump");
+      }
     }
 
     const vy = this.player.body.velocity.y;
@@ -283,5 +282,9 @@ export default class Game extends Phaser.Scene {
     }
 
     return bottomPlatform;
+  }
+
+  getConsoleLog() {
+    console.log("game scene got");
   }
 }

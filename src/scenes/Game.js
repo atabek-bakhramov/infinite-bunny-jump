@@ -150,7 +150,6 @@ export default class Game extends Phaser.Scene {
     });
 
     this.volume.on("pointerup", () => {
-      console.log("clicked");
       this.isSound = !this.isSound;
     });
   }

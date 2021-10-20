@@ -1,28 +1,23 @@
 import Phaser from "../lib/phaser.js";
-
 const i18next = window.i18next;
+
+import translationEn from "../public/locales/en/translation.json" assert { type: "json" };
+import translationRu from "../public/locales/ru/translation.json" assert { type: "json" };
+import translationAr from "../public/locales/ar/translation.json" assert { type: "json" };
+console.log(translationEn);
 
 i18next.init({
   lng: "en",
   debug: true,
   resources: {
     en: {
-      translation: {
-        carrots: "Carrots:",
-        gameOver: "Game Over!",
-      },
+      translation: translationEn,
     },
     ru: {
-      translation: {
-        carrots: "Морковь:",
-        gameOver: "Конец игры!",
-      },
+      translation: translationRu,
     },
     ar: {
-      translation: {
-        carrots: ":جزر",
-        gameOver: "!انتهت اللعبة",
-      },
+      translation: translationAr,
     },
   },
 });
@@ -68,6 +63,7 @@ export default class TextScene extends Phaser.Scene {
     this.buttonAr = this.add
       .text(220, 20, "العربية", {
         color: "rgb(50,100,150)",
+        fontSize: 20,
       })
       .setInteractive()
       .on("pointerdown", () => this.buttonAr.setScale(1.1))
